@@ -44,7 +44,37 @@ Author: Abrar Ahmad (Young Scholar)<br>
 Topic: Political Essay<br>
 <a href="Beyond%20Liberal%20Labels.pdf" target="_blank" style="color:blue; font-weight:bold; font-size:16px;">📄 Download / Read PDF</a>
 </div>
+</div><div class="card" id="papers">
+<h2>📚 Latest Papers</h2>
+<div id="papers-list">Loading papers...</div>
 </div>
+
+<script>
+async function loadPapers() {
+  const repo = "Abrar5219/OpenMinds-archive-";
+  const api = `https://api.github.com/repos/${repo}/contents`;
+  try {
+    const res = await fetch(api);
+    const files = await res.json();
+    const pdfs = files.filter(f => f.name.toLowerCase().endsWith('.pdf'));
+    const list = document.getElementById('papers-list');
+    if(pdfs.length === 0){
+      list.innerHTML = "<i>No papers yet. Upload your first PDF!</i>";
+      return;
+    }
+    list.innerHTML = pdfs.map(pdf => `
+      <div style="border:1px solid #222; padding:18px; border-radius:12px; background:#fff; margin:12px 0;">
+        <strong>${pdf.name.replace('.pdf','')}</strong><br>
+        <small>File: ${pdf.name}</small><br><br>
+        <a href="${pdf.download_url}" target="_blank" style="color:blue; font-weight:bold; font-size:16px;">📄 Download / Read PDF</a>
+      </div>
+    `).join('');
+  } catch(e){
+    document.getElementById('papers-list').innerHTML = "Error loading papers. Please refresh.";
+  }
+}
+loadPapers();
+</script>
 
 <div class="card" id="submit">
 <h2>📤 Submit Your Paper</h2>
